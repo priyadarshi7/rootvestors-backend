@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { UserModel } from '../models/user';  
+import jwt from "jsonwebtoken"
+
+import { generateToken } from '../service/auth';
 
 //Signup
 async function handleUserSignUp(req: Request, res: Response): Promise<void> {
@@ -32,10 +35,21 @@ async function handleUserSignUp(req: Request, res: Response): Promise<void> {
         });
 
         if (user) {
+            const token = await generateToken(user._id.toString());
+
+            //cookie
+            res.cookie('token', token, {
+                httpOnly: true, 
+                secure: process.env.NODE_ENV === 'production', 
+                expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+            });
+
+            //signup successful
             res.status(201).json({
                 _id: user.id,
                 username: user.username,
                 email: user.email,
+                token,
             });
         } else {
             res.status(400).json({ message: "Signup unsuccessful" });
@@ -69,11 +83,21 @@ async function handleUserLogin(req: Request, res: Response): Promise<void> {
         const validatePassword = await bcrypt.compare(password, user?.password);
 
         if (validatePassword) {
+            const token = await generateToken(user._id.toString());
+
+            //cookie
+            res.cookie('token', token, {
+                httpOnly: true, 
+                secure: process.env.NODE_ENV === 'production', 
+                expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+            });
+
             // Successfully logged in
             res.json({
                 _id: user.id,
                 username: user.username,
                 email: user.email,
+                token,
             });
         } else {
             // Invalid password
