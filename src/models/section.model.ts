@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 export interface ISection extends Document {
+    _id: mongoose.Types.ObjectId;
     title: string;
     desc: string;
     videoUrl: string;

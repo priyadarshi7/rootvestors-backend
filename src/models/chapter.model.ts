@@ -1,6 +1,7 @@
 import mongoose, {Model, Schema, Document} from "mongoose";
 
 export interface IChapter extends Document {
+   _id: mongoose.Types.ObjectId;
     title: string;
     desc: string;
     sections: mongoose.Types.ObjectId[]; // Array of Section IDs

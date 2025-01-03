@@ -6,6 +6,7 @@ dotenv.config();
 
 import { connectDB } from './connection/connectDB'; 
 import {userRouter} from './routes/user'
+import { courseRouter } from './routes/course.route';
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(cors({
 
 //routes
 app.use("/user",userRouter);
+app.use("/courses", courseRouter)
 
 
 // Basic route

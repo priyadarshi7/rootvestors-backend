@@ -1,6 +1,7 @@
 import mongoose, {Model, Schema} from "mongoose";
 
 export interface ICourse extends Document {
+    _id: mongoose.Types.ObjectId;
     title: string;
     desc: string;
     educator: string;
@@ -12,6 +13,6 @@ const courseSchema: Schema<ICourse> = new Schema({
     desc: { type: String, required: true },
     educator: { type: String, required: true },
     chapters: [{ type: mongoose.Schema.Types.ObjectId, ref: "Chapter" }],
-  });
+});
   
 export const Course = mongoose.model<ICourse>("Course", courseSchema);
