@@ -120,7 +120,7 @@ async function createChapter(req:Request, res: Response): Promise<void>{
 
         if(!title || !desc){
             res.status(404).json({message:"Fill the required fields"});
-            return;
+             return;
         }
 
         const course = await Course.findById(courseId);
